@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  become: true # makes the user root
+  tasks:
+    - name: update dnf packages
+      dnf:
+        update: yes
+        upgrade: yes
