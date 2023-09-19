@@ -15,6 +15,7 @@
           - firewalld
           - zsh
           - tmux
+          - docker
         state: latest
         update_cache: true
     - name: add current public key (~/.ssh/id_rsa.pub)

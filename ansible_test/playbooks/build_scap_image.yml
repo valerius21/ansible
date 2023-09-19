@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true # makes the user root
+  tasks:
+    - name: Clone SCAP project
+      git:
+        repo: https://github.com/valerius21/scap.git
+        dest: /tmp/scap
+    - name: build Docker image
+      command: docker build . -t scap:dev
+      become: true
+      args:
+        chdir: /tmp/scap
