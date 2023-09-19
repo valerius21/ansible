@@ -6,7 +6,7 @@
   tasks:
     - name: Install Packages
       dnf:
-        pkg:
+        name:
           - epel-release
           - curl
           - wget
@@ -15,7 +15,6 @@
           - firewalld
           - zsh
           - tmux
-          - docker
         state: latest
         update_cache: true
     - name: add current public key (~/.ssh/id_rsa.pub)
@@ -23,3 +22,19 @@
         user: cloud
         state: present
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    - name: Add the docker repository
+      command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      become: true
+    - name: Install the needed packages
+      dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: latest
+        update_cache: true
+      become: true
+    - name: Enable docker.d
+      command: sudo systemctl --now enable docker
+      become: true
