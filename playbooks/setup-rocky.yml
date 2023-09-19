@@ -1,0 +1,18 @@
+---
+- hosts: all
+
+  become: true # makes the user root
+
+  tasks:
+    - name: Install Packages
+      dnf:
+        pkg:
+          - epel-release
+          - curl
+          - wget
+          - vim
+          - git
+          - firewalld
+          - zsh
+        state: latest
+        update_cache: true
