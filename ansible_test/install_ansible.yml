@@ -1,10 +1,13 @@
 ---
-- hosts: all
-
-  become: true # makes the user root
-
+- hosts: master
+  become: yes
   tasks:
-    - name: Install Packages
+    - name: update dnf packages
+      dnf:
+        pkg: "*"
+        state: latest
+        update_cache: true
+    - name: install basics Server
       dnf:
         pkg:
           - epel-release
@@ -17,6 +20,12 @@
           - tmux
         state: latest
         update_cache: true
+    - name: Install prequisits for ansible
+      dnf:
+        pkg:
+          - pipx
+    - name: install ansible via pipx
+      shell: pipx install --include-deps ansible
     - name: add current public key (~/.ssh/id_rsa.pub)
       ansible.posix.authorized_key:
         user: cloud

@@ -1,0 +1,15 @@
+[master]
+<ip>
+
+[nodes]
+<ip>
+<ip>
+
+[master:vars]
+ansible_ssh_user=Username
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[nodes:vars]
+ansible_ssh_user=Username
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+

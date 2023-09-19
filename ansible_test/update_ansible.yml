@@ -1,0 +1,6 @@
+---
+- hosts: master
+  become: yes
+  tasks:
+    - name: upgrade ansible via pipx
+      shell: pipx upgrade ansible
