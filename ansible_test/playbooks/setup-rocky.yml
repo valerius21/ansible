@@ -1,8 +1,6 @@
 ---
 - hosts: all
-
   become: true # makes the user root
-
   tasks:
     - name: Install Packages
       dnf:
@@ -17,14 +15,16 @@
           - tmux
         state: latest
         update_cache: true
+
     - name: add current public key (~/.ssh/id_rsa.pub)
       ansible.posix.authorized_key:
         user: cloud
         state: present
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
     - name: Add the docker repository
       command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-      become: true
+
     - name: Install the needed packages
       dnf:
         name:
@@ -34,7 +34,20 @@
           - docker-compose-plugin
         state: latest
         update_cache: true
-      become: true
-    - name: Enable docker.d
-      command: sudo systemctl --now enable docker
-      become: true
+
+    - name: Enable and start the Docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Update SSH configuration
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config # Update the path to your sshd_config file
+        regexp: "^#PasswordAuthentication yes"
+        line: "PasswordAuthentication no"
+
+    - name: Restart SSH service
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
