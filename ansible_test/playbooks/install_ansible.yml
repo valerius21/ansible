@@ -7,25 +7,47 @@
         pkg: "*"
         state: latest
         update_cache: true
-    - name: install basics Server
+
+    - name: Install Packages
       apt:
-        pkg:
-          - epel-release
+        name:
           - curl
           - wget
           - vim
           - git
-          - firewalld
           - zsh
           - tmux
+          - libmagickwand-dev
+          - build-essential
         state: latest
         update_cache: true
+
+    - name: add current public key (~/.ssh/id_rsa.pub)
+      ansible.posix.authorized_key:
+        user: cloud
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    - name: Update SSH configuration (Change SSH Port)
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?Port "
+        line: "Port 10771"
+      become: true
+
+    - name: Restart SSH service
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+
     - name: Install prequisits for ansible
       apt:
         pkg:
           - pipx
+
     - name: install ansible via pipx
       shell: pipx install --include-deps ansible
+
     - name: add current public key (~/.ssh/id_rsa.pub)
       ansible.posix.authorized_key:
         user: cloud

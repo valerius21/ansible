@@ -5,14 +5,14 @@
     - name: Install Packages
       apt:
         name:
-          - epel-release
           - curl
           - wget
           - vim
           - git
-          - firewalld
           - zsh
           - tmux
+          - libmagickwand-dev
+          - build-essential
         state: latest
         update_cache: true
 
@@ -21,25 +21,6 @@
         user: cloud
         state: present
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-
-    - name: Add the docker repository
-      command: apt config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-
-    - name: Install the needed packages
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-compose-plugin
-        state: latest
-        update_cache: true
-
-    - name: Enable and start the Docker service
-      systemd:
-        name: docker
-        enabled: yes
-        state: started
 
     - name: Update SSH configuration (Change SSH Port)
       ansible.builtin.lineinfile:
