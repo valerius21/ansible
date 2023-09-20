@@ -41,11 +41,12 @@
         enabled: yes
         state: started
 
-    - name: Update SSH configuration
+    - name: Update SSH configuration (Change SSH Port)
       ansible.builtin.lineinfile:
-        path: /etc/ssh/sshd_config # Update the path to your sshd_config file
-        regexp: "^#PasswordAuthentication yes"
-        line: "PasswordAuthentication no"
+        path: /etc/ssh/sshd_config
+        regexp: "^#?Port "
+        line: "Port 10771"
+      become: true
 
     - name: Restart SSH service
       ansible.builtin.service:
