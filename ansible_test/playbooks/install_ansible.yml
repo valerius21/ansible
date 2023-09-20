@@ -2,13 +2,13 @@
 - hosts: master
   become: yes
   tasks:
-    - name: update dnf packages
-      dnf:
+    - name: update apt packages
+      apt:
         pkg: "*"
         state: latest
         update_cache: true
     - name: install basics Server
-      dnf:
+      apt:
         pkg:
           - epel-release
           - curl
@@ -21,7 +21,7 @@
         state: latest
         update_cache: true
     - name: Install prequisits for ansible
-      dnf:
+      apt:
         pkg:
           - pipx
     - name: install ansible via pipx

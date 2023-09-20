@@ -3,7 +3,7 @@
   become: true # makes the user root
   tasks:
     - name: Install Packages
-      dnf:
+      apt:
         name:
           - epel-release
           - curl
@@ -23,10 +23,10 @@
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
     - name: Add the docker repository
-      command: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      command: apt config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
     - name: Install the needed packages
-      dnf:
+      apt:
         name:
           - docker-ce
           - docker-ce-cli

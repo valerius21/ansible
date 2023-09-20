@@ -6,8 +6,13 @@
       git:
         repo: https://github.com/valerius21/scap.git
         dest: /tmp/scap
-    - name: build Docker image
-      command: docker build . -t scap:dev
+    - name: install libmagick
+      apt:
+        name:
+          - ImageMagick-devel
+      become: true
+    - name: build scap
+      command: go mod tidy && go build cmd/main.go && cp main ~/scap
       become: true
       args:
         chdir: /tmp/scap
